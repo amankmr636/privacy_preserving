@@ -27,7 +27,7 @@ CryptoArtifacts BuildContextAndKeys() {
     rot.push_back(-s);
   }
   cc->EvalAtIndexKeyGen(kpA.secretKey, rot);
-  cc->EvalSumKeyGen(kpA.secretKey, kpA.publicKey);
+  cc->EvalSumKeyGen(kpA.secretKey);
 
   return CryptoArtifacts{cc, kpT.publicKey, kpA.secretKey, kpB.secretKey,
                          kpT.secretKey};
@@ -157,7 +157,7 @@ std::optional<std::string> recvBlob(int sock) {
 
 bool sendCiphertext(int sock, const Ciphertext<DCRTPoly>& ct) {
   std::stringstream ss;
-  if (!Serial::Serialize(ct, ss, SerType::BINARY)) return false;
+  Serial::Serialize(ct, ss, SerType::BINARY);
   return sendBlob(sock, ss.str());
 }
 
@@ -166,7 +166,7 @@ std::optional<Ciphertext<DCRTPoly>> recvCiphertext(int sock) {
   if (!blob) return std::nullopt;
   Ciphertext<DCRTPoly> ct;
   std::stringstream ss(*blob);
-  if (!Serial::Deserialize(ct, ss, SerType::BINARY)) return std::nullopt;
+  Serial::Deserialize(ct, ss, SerType::BINARY);
   return ct;
 }
 
